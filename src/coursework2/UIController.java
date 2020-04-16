@@ -21,7 +21,7 @@ import javafx.scene.media.MediaPlayer;
 
 /**
  *
- * @author LaveshPanjwani
+ * @author Lavesh Panjwani
  */
 public class UIController extends UIView {
 
@@ -31,15 +31,33 @@ public class UIController extends UIView {
     private List<Song> search = new ArrayList<Song>();
     private Queue<Song> playlist = new LinkedList<Song>();
 
+    /*
+     * Constructor
+     */
     public UIController() {
         super();
 
-        mediaStop.setOnAction(this::StopSong);
+        /*
+         * Button Click Actions
+         */
+        // Player Play Action
         mediaPlay.setOnAction(this::PlaySong);
+        // Player Stop Action
+        mediaStop.setOnAction(this::StopSong);
+        // Player Pause Action
         mediaPause.setOnAction(this::PauseSong);
+        // Player Skip Action
         mediaSkip.setOnAction(this::SkipSong);
+        // Add to Queue Action
         libraryAdd.setOnAction(this::AddToQueue);
+        // Remove form Queue Action
+        queueRemove.setOnAction(this::RemoveFromQueue);
+        // Library Search By Name Action
+        librarySearchName.setOnAction(this::SearchByName);
+        // Library Search Reset Action
+        librarySearchReset.setOnAction(this::ResetSearchResults);
 
+        // Initiate Song Library
         initLibrary();
     }
 
@@ -54,7 +72,7 @@ public class UIController extends UIView {
      */
     private void initLibrary() {
         try {
-            this.library = Utils.ReadTabFile();
+            this.library = Utils.ReadTabFile("songs.txt");
             updateLibraryView();
         } catch (FileNotFoundException err) {
             FatalErrorOccurred();
@@ -82,20 +100,36 @@ public class UIController extends UIView {
 
     /*
      *
-     * Current Song Verification & Controls
+     * Current Song Helper Functions
      * 
      */
 
+    /*
+     * Check if Current Song is Valid/Available/Set
+     */
     private Boolean isCurrentSet() {
+        // Check for Current Exists
         if (current == null || current.getName() == null) {
+            // Return False to current is not Valid/Available/Set
             return false;
         }
+        // Return True to current is Valid/Available/Set
         return true;
     }
 
+    /*
+     * Start Song if Queue / PlayList is Empty
+     */
     private void isEmptySkip() {
+        // Check if Current Song is Valid/Available/Set
         if (!isCurrentSet())
-            SkipSong();
+            SkipSong(); // Skip Song since Current is not Valid/Available/Set
+    }
+
+    private void setCurrentText() {
+        // Check if Current Song is Valid/Available/Set
+        if (isCurrentSet())
+            queueCurrentLabel.setText("Currently Playing: " + current.getName() + "ft." + current.getArtist());
     }
 
     /*
@@ -108,16 +142,24 @@ public class UIController extends UIView {
      * Update JavaFX Song Library List
      */
     private void updateLibraryView() {
+        // Create New JavaFX Observable List for Displaying
         ObservableList<String> list = FXCollections.observableArrayList();
 
+        // Select List to Display with Search Displaying Conditionally when Active
         List<Song> results = search.size() > 0 ? search : library;
 
+        // Iterate over Song Library/Results List
         for (Song song : results) {
+            // Fetch Song Name from Song Class
             String songName = song.getName();
+            // Fetch Song's Artist Name from Library
             String songArtist = song.getArtist();
+
+            // Add to List after Formatted String
             list.add(songName + " ft. " + songArtist);
         }
 
+        // Set JavaFX Display Items from List
         libraryList.setItems(list);
     }
 
@@ -127,14 +169,20 @@ public class UIController extends UIView {
     private void updateQueueView() {
         ObservableList<String> list = FXCollections.observableArrayList();
 
+        // Iterate over Song Queue / PlayList
         for (Song song : playlist) {
+            // Fetch Song Name from Song Class
             String songName = song.getName();
+            // Fetch Song's Artist Name from Library
             String songArtist = song.getArtist();
+            // Add to List after Formatted String
             list.add(songName + " ft. " + songArtist);
         }
 
+        // Set JavaFX Display Items from List
         queueList.setItems(list);
 
+        // Start Song if Queue / PlayList is Empty
         isEmptySkip();
     }
 
@@ -184,6 +232,9 @@ public class UIController extends UIView {
 
         // Initialize New Video
         initVideo();
+
+        // Set Current Track Information
+        setCurrentText();
     }
 
     /*
@@ -195,7 +246,7 @@ public class UIController extends UIView {
     }
 
     /*
-     * Add to Queue (Button Triggered)
+     * Add to Queue / PlayList (Button Triggered)
      */
     private void AddToQueue(Event e) {
         // Fetch Selected Index from Library Tab
@@ -209,22 +260,66 @@ public class UIController extends UIView {
     }
 
     /*
+     * Remove From Queue / PlayList (Button Triggered)
+     */
+    private void RemoveFromQueue(Event e) {
+        // Fetch Selected Index from Queue Tab
+        int index = queueList.getSelectionModel().getSelectedIndex();
+
+        // Remove Entry to PlayList / Queue
+        this.playlist.remove(index);
+
+        // Update Queue JavaFX View
+        updateQueueView();
+    }
+
+    /*
      *
      * Search Results Section
      * 
      */
 
+    /*
+     * Remove Song in Search Results (Programmatically Triggered)
+     */
     private void ResetSearchResults() {
+        // Reset Search List
         search = new ArrayList<Song>();
+
+        // Reset Text Entered by User
+        librarySearchField.setText("");
+
+        // Update Library JavaFX View
+        updateLibraryView();
     }
 
-    private void SearchByName(String substring) {
+    /*
+     * Remove Song in Search Results (Button Triggered)
+     */
+    private void ResetSearchResults(Event e) {
+        // Change to Programmatically Triggered
+        ResetSearchResults();
+    }
+
+    /*
+     * Search Song by Name (Supports Searching by Characters & Keywords)
+     */
+    private void SearchByName(Event e) {
+        // Check Text Entered in Search Field
+        String substring = librarySearchField.getText();
+
+        // Iterate over Song Library List
         for (Song song : library) {
-            String songName = song.getName();
-            if (songName.contains(substring)) {
-                search.add(song);
+            // Retrieve Song Name from Song Class
+            String songName = song.getName().toLowerCase();
+            // Check if Substring is in Song Name
+            if (songName.contains(substring.toLowerCase())) {
+                // Song matches Search Criteria & Add to Results
+                this.search.add(song);
             }
         }
+
+        // Update Library JavaFX View
         updateLibraryView();
     }
 
@@ -238,10 +333,13 @@ public class UIController extends UIView {
      * Fatal Error Occurred in this App's Functionality
      */
     private void FatalErrorOccurred() {
+        // Create New Alert with Error Body
         Alert alert = new Alert(AlertType.ERROR);
+        // Set Alert Dialogue Content Text
         alert.setContentText("Dear User, Fatal Errored in this App's Functionality! Exiting Now!");
+        // Show & acknowledge User Response
         alert.showAndWait();
+        // Exit Java Application
         System.exit(0);
     }
-
 }

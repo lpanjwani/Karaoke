@@ -13,7 +13,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1800.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <SplitPane fx:id="mainWrapper" dividerPositions="0.19270298047276466, 0.8042137718396711" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1800.0" VBox.vgrow="ALWAYS">
       <items>
@@ -39,7 +39,7 @@
                      </graphic>
                   </Button>
                   <Button fx:id="librarySearchName" layoutX="171.0" layoutY="72.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="53.0" text="Name" />
-                  <Button fx:id="libraryArtist" layoutX="232.0" layoutY="72.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="53.0" text="Artist" />
+                  <Button fx:id="librarySearchReset" layoutX="232.0" layoutY="72.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="53.0" text="Reset" />
           </children>
         </AnchorPane>
       <AnchorPane id="Content" fx:id="mediaWrapper" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0">
