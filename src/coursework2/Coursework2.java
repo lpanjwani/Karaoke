@@ -8,6 +8,9 @@
  */
 package coursework2;
 
+import java.util.List;
+import java.util.Map;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -22,18 +25,29 @@ public class Coursework2 extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Create UI Controller that Contains App Logic
-        UIController ui = new UIController();
 
-        // Create UIController to JavaFX Scene
-        Scene scene = new Scene(ui);
+        Parameters parameters = getParameters();
+        List<String> rawArguments = parameters.getRaw();
 
-        // Set Title to Stage
-        primaryStage.setTitle("Karaoke");
-        // Set Scene in Stage
-        primaryStage.setScene(scene);
-        // Show Stage
-        primaryStage.show();
+        if (rawArguments.size() > 0) {
+            // Fetch Library File Location
+            String fileName = rawArguments.get(0);
+
+            // Create UI Controller that Contains App Logic
+            UIController ui = new UIController(fileName);
+
+            // Create UIController to JavaFX Scene
+            Scene scene = new Scene(ui);
+
+            // Set Title to Stage
+            primaryStage.setTitle("Karaoke");
+            // Set Scene in Stage
+            primaryStage.setScene(scene);
+            // Show Stage
+            primaryStage.show();
+        } else {
+            System.out.println("Missing / Incorrect Library File Location in Arguments");
+        }
     }
 
     /**

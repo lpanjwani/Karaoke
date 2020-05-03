@@ -42,7 +42,7 @@ public class UIController extends UIView {
     /*
      * Constructor
      */
-    public UIController() {
+    public UIController(String libraryFileName) {
         super();
 
         /*
@@ -66,7 +66,7 @@ public class UIController extends UIView {
         librarySearchReset.setOnAction(this::ResetSearchResults);
 
         // Initiate Song Library
-        initLibrary();
+        initLibrary(libraryFileName);
     }
 
     /*
@@ -78,10 +78,10 @@ public class UIController extends UIView {
     /*
      * Initialize Library from File
      */
-    private void initLibrary() {
+    private void initLibrary(String filename) {
         try {
             // Load Song Data into Library
-            library = Utils.ReadTabFile("songs.txt");
+            library = Utils.ReadTabFile(filename);
 
             // Update JavaFX Library ListView
             updateLibraryView();
