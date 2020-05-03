@@ -1,8 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * Utils Class (Short for Utilities)
+ * 
+ * This class deals with handling External Components such as Files Files are
+ * Read, Parsed in this Class Files are dealt with a Relative URI Structures
+ *
+ * @author LaveshPanjwani
  */
+
 package coursework2;
 
 import java.io.File; // Import the File class
@@ -13,12 +18,19 @@ import java.util.List;
 import java.util.Scanner; // Import the Scanner class to read text files
 
 /**
- *
+ * Utilities Class
+ * 
  * @author LaveshPanjwani
  */
 
 interface Utils {
 
+    /**
+     * Reads, Parses & Returns Library File
+     * 
+     * @returns List<Song> (List Containing Song Class)
+     * @throws FileNotFoundException
+     */
     public static List<Song> ReadTabFile(String fileName) throws FileNotFoundException {
         // Get File with Relative Path
         File file = new File(RelativeFilePath(fileName).getFile());
@@ -56,6 +68,12 @@ interface Utils {
         return null;
     }
 
+    /**
+     * Returns Relative URIs in respect the Class
+     * 
+     * @returns List<Song> (List Containing Song Class)
+     * @throws FileNotFoundException
+     */
     public static URL RelativeFilePath(String fileName) throws FileNotFoundException {
         // Get Resource File Path
         URL path = Utils.class.getResource(fileName);

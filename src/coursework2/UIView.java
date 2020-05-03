@@ -1,3 +1,12 @@
+
+/**
+ * UI View Class 
+ * 
+ * Deals with Placing & Setting JavaFX Components 
+ * 
+ * @author Lavesh Panjwani
+ */
+
 package coursework2;
 
 import javafx.beans.binding.Bindings;
@@ -14,6 +23,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
 
+/**
+ * 
+ * @author Lavesh Panjwani
+ */
 public abstract class UIView extends VBox {
 
     protected final SplitPane mainWrapper;
@@ -291,6 +304,5 @@ public abstract class UIView extends VBox {
         queueWrapper.getChildren().add(queueList);
         mainWrapper.getItems().add(queueWrapper);
         getChildren().add(mainWrapper);
-
     }
 }

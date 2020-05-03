@@ -1,7 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+
+/**
+ * UI Controller Class 
+ * 
+ * Deals with App & Business Logic of the Karaoke Application including Library & Queue/PlayList
+ * Controlling UI Components set in UIView Class
+ * Using Utils Class for Reading Files
+ * 
+ * @author Lavesh Panjwani
  */
 package coursework2;
 
@@ -18,15 +23,18 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 /**
- *
+ * UI Controller Class
+ * 
  * @author Lavesh Panjwani
  */
 public class UIController extends UIView {
 
     private MediaPlayer player;
     private Song current;
+    private int currentPlayRemaining;
     private List<Song> library = new ArrayList<Song>();
     private List<Song> search = new ArrayList<Song>();
     private Queue<Song> playlist = new LinkedList<Song>();
@@ -72,9 +80,13 @@ public class UIController extends UIView {
      */
     private void initLibrary() {
         try {
-            this.library = Utils.ReadTabFile("songs.txt");
+            // Load Song Data into Library
+            library = Utils.ReadTabFile("songs.txt");
+
+            // Update JavaFX Library ListView
             updateLibraryView();
         } catch (FileNotFoundException err) {
+            // Throw Fatal Error Alert when Song File is not available
             FatalErrorOccurred();
         }
     }
@@ -84,17 +96,76 @@ public class UIController extends UIView {
      */
     private void initVideo() {
         try {
+            // Check if Song is Available to Play or Throw Exception
             if (!isCurrentSet())
                 throw new NullPointerException();
 
-            this.player = new MediaPlayer(new Media(Utils.RelativeFilePath(current.getLocation()).toExternalForm()));
+            // Get Relative Song Location
+            player = new MediaPlayer(new Media(Utils.RelativeFilePath(current.getLocation()).toExternalForm()));
+
+            // Get Current Song PlayTime
+            currentPlayRemaining = current.getPlayTime();
+
+            // Get Song Play Time & Convert to Durations Class
+            Duration totalTime = Duration.seconds((long) currentPlayRemaining);
+
+            // Set Player End Time
+            player.setStopTime(totalTime);
+
+            // Player Reached End Point Event Listener
+            player.setOnEndOfMedia(new Runnable() {
+
+                // Execute Method at End Time
+                @Override
+                public void run() {
+                    // Execute onSongEnd Method
+                    onSongEnd();
+                }
+            });
+
+            // Include Media Player in JavaFX MediaView
             mediaView.setMediaPlayer(player);
+
+            // Play Song Method
             PlaySong();
 
-        } catch (FileNotFoundException ex) {
+        } catch (
+        // Throw Error if MP4 not found
+        FileNotFoundException ex) {
+            // Throw Fatal Error
             FatalErrorOccurred();
         } catch (NullPointerException ex) {
+            // Print Stack Trace for Null Pointer
             ex.printStackTrace();
+        }
+    }
+
+    /*
+     * Event Listener for Song End Reached
+     */
+    private void onSongEnd() {
+        // Retrieve Played Time in Seconds
+        int playedTime = (int) player.getCurrentTime().toSeconds();
+
+        // Decrement Remaining PlayTime with PlayTime in this Cycle
+        currentPlayRemaining -= playedTime;
+
+        // Check if there is still some Remaining PlayTime
+        if (currentPlayRemaining > 0) {
+            // Get Remaining Song Play Time & Convert to Durations Class
+            Duration totalTime = Duration.seconds((long) currentPlayRemaining);
+
+            // Set Player Stop Time
+            player.setStopTime(totalTime);
+
+            // Seek to Start of Video
+            player.seek(Duration.ZERO);
+
+            // Play Song
+            player.play();
+        } else {
+            // Song is finished played & skip to next song in Queue
+            SkipSong();
         }
     }
 
@@ -128,8 +199,12 @@ public class UIController extends UIView {
 
     private void setCurrentText() {
         // Check if Current Song is Valid/Available/Set
-        if (isCurrentSet())
+        if (isCurrentSet()) {
             queueCurrentLabel.setText("Currently Playing: " + current.getName() + "ft." + current.getArtist());
+        } else {
+            // No Song in Queue Text Label
+            queueCurrentLabel.setText("Stopped");
+        }
     }
 
     /*
@@ -224,14 +299,20 @@ public class UIController extends UIView {
      * Pause Song (Programmatically Triggered)
      */
     private void SkipSong() {
-        // Fetch & Remove the HEAD from the PlayList / Queue
-        this.current = playlist.poll();
+        // Check if there is songs in Queue/PlayList
+        if (playlist.size() > 0) {
+            // Fetch & Remove the HEAD from the PlayList / Queue
+            this.current = playlist.poll();
 
-        // Update Queue JavaFX View
-        updateQueueView();
+            // Update Queue JavaFX View
+            updateQueueView();
 
-        // Initialize New Video
-        initVideo();
+            // Initialize New Video
+            initVideo();
+        } else {
+            // No Song Found so Reset Current Song Information
+            this.current = null;
+        }
 
         // Set Current Track Information
         setCurrentText();
