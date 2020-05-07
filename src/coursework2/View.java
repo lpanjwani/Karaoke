@@ -21,23 +21,29 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaView;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 
-/**
- * 
- * @author Lavesh Panjwani
- */
-public abstract class UIView extends VBox {
+public abstract class View extends VBox {
 
     protected final SplitPane mainWrapper;
     protected final AnchorPane libraryWrapper;
     protected final Label libraryText;
     protected final ListView libraryList;
     protected final TextField librarySearchField;
-    protected final Button libraryAdd;
+    protected final Button libraryIncludeButton;
     protected final ImageView libraryAddImage;
     protected final Button librarySearchName;
     protected final Button librarySearchReset;
+    protected final TextField libraryAddName;
+    protected final TextField libraryAddArtistName;
+    protected final TextField libraryAddRuntime;
+    protected final TextField libraryAddVideoFile;
+    protected final Button libraryAdd;
+    protected final ImageView libraryAddImage1;
+    protected final Label libraryIncludeLibraryLabel;
+    protected final Label libraryAddQueueText;
+    protected final Line libraryLineSeperator;
     protected final AnchorPane mediaWrapper;
     protected final MediaView mediaView;
     protected final Button mediaStop;
@@ -54,20 +60,29 @@ public abstract class UIView extends VBox {
     protected final ImageView queueRemoveImage;
     protected final Label queueCurrentLabel;
     protected final ListView queueList;
+    protected final Label QueueRemoveLabel;
     protected DoubleProperty mvw;
     protected DoubleProperty mvh;
 
-    public UIView() {
-
+    public View() {
         mainWrapper = new SplitPane();
         libraryWrapper = new AnchorPane();
         libraryText = new Label();
         libraryList = new ListView();
         librarySearchField = new TextField();
-        libraryAdd = new Button();
+        libraryIncludeButton = new Button();
         libraryAddImage = new ImageView();
         librarySearchName = new Button();
         librarySearchReset = new Button();
+        libraryAddName = new TextField();
+        libraryAddArtistName = new TextField();
+        libraryAddRuntime = new TextField();
+        libraryAddVideoFile = new TextField();
+        libraryAdd = new Button();
+        libraryAddImage1 = new ImageView();
+        libraryIncludeLibraryLabel = new Label();
+        libraryAddQueueText = new Label();
+        libraryLineSeperator = new Line();
         mediaWrapper = new AnchorPane();
         mediaView = new MediaView();
         mediaStop = new Button();
@@ -84,6 +99,7 @@ public abstract class UIView extends VBox {
         queueRemoveImage = new ImageView();
         queueCurrentLabel = new Label();
         queueList = new ListView();
+        QueueRemoveLabel = new Label();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -120,51 +136,123 @@ public abstract class UIView extends VBox {
         libraryText.setFont(new Font(18.0));
 
         libraryList.setLayoutX(15.0);
-        libraryList.setLayoutY(113.0);
+        libraryList.setLayoutY(101.0);
         libraryList.setMaxHeight(USE_PREF_SIZE);
         libraryList.setMaxWidth(USE_PREF_SIZE);
         libraryList.setMinHeight(USE_PREF_SIZE);
         libraryList.setMinWidth(USE_PREF_SIZE);
-        libraryList.setPrefHeight(522.0);
+        libraryList.setPrefHeight(409.0);
         libraryList.setPrefWidth(273.0);
 
         librarySearchField.setLayoutX(14.0);
-        librarySearchField.setLayoutY(72.0);
+        librarySearchField.setLayoutY(61.0);
         librarySearchField.setMaxHeight(USE_PREF_SIZE);
         librarySearchField.setMaxWidth(USE_PREF_SIZE);
         librarySearchField.setMinHeight(USE_PREF_SIZE);
         librarySearchField.setMinWidth(USE_PREF_SIZE);
-        librarySearchField.setPrefHeight(26.0);
-        librarySearchField.setPrefWidth(149.0);
+        librarySearchField.setPrefHeight(31.0);
+        librarySearchField.setPrefWidth(128.0);
         librarySearchField.setPromptText("Search");
 
-        libraryAdd.setLayoutX(129.0);
-        libraryAdd.setLayoutY(644.0);
-        libraryAdd.setMnemonicParsing(false);
-        libraryAdd.setPrefHeight(36.0);
-        libraryAdd.setPrefWidth(33.0);
-        libraryAdd.setStyle("-fx-background-radius: 100;");
+        libraryIncludeButton.setLayoutX(87.0);
+        libraryIncludeButton.setLayoutY(651.0);
+        libraryIncludeButton.setMnemonicParsing(false);
+        libraryIncludeButton.setPrefHeight(36.0);
+        libraryIncludeButton.setPrefWidth(33.0);
+        libraryIncludeButton.setStyle("-fx-background-radius: 100;");
 
         libraryAddImage.setFitHeight(23.0);
         libraryAddImage.setFitWidth(16.0);
         libraryAddImage.setPickOnBounds(true);
         libraryAddImage.setPreserveRatio(true);
-        libraryAddImage.setImage(new Image(getClass().getResource("Icons/plus.png").toExternalForm()));
-        libraryAdd.setGraphic(libraryAddImage);
+        libraryAddImage.setImage(new Image(getClass().getResource("Icons/book-open.png").toExternalForm()));
+        libraryIncludeButton.setGraphic(libraryAddImage);
 
-        librarySearchName.setLayoutX(171.0);
-        librarySearchName.setLayoutY(72.0);
+        librarySearchName.setLayoutX(147.0);
+        librarySearchName.setLayoutY(62.0);
         librarySearchName.setMnemonicParsing(false);
-        librarySearchName.setPrefHeight(26.0);
-        librarySearchName.setPrefWidth(53.0);
+        librarySearchName.setPrefHeight(31.0);
+        librarySearchName.setPrefWidth(67.0);
         librarySearchName.setText("Name");
 
-        librarySearchReset.setLayoutX(232.0);
-        librarySearchReset.setLayoutY(72.0);
+        librarySearchReset.setLayoutX(218.0);
+        librarySearchReset.setLayoutY(62.0);
         librarySearchReset.setMnemonicParsing(false);
-        librarySearchReset.setPrefHeight(26.0);
-        librarySearchReset.setPrefWidth(53.0);
+        librarySearchReset.setPrefHeight(31.0);
+        librarySearchReset.setPrefWidth(67.0);
         librarySearchReset.setText("Reset");
+
+        libraryAddName.setLayoutX(14.0);
+        libraryAddName.setLayoutY(577.0);
+        libraryAddName.setMaxHeight(USE_PREF_SIZE);
+        libraryAddName.setMaxWidth(USE_PREF_SIZE);
+        libraryAddName.setMinHeight(USE_PREF_SIZE);
+        libraryAddName.setMinWidth(USE_PREF_SIZE);
+        libraryAddName.setPrefHeight(26.0);
+        libraryAddName.setPrefWidth(128.0);
+        libraryAddName.setPromptText("Song Name");
+
+        libraryAddArtistName.setLayoutX(155.0);
+        libraryAddArtistName.setLayoutY(578.0);
+        libraryAddArtistName.setMaxHeight(USE_PREF_SIZE);
+        libraryAddArtistName.setMaxWidth(USE_PREF_SIZE);
+        libraryAddArtistName.setMinHeight(USE_PREF_SIZE);
+        libraryAddArtistName.setMinWidth(USE_PREF_SIZE);
+        libraryAddArtistName.setPrefHeight(26.0);
+        libraryAddArtistName.setPrefWidth(128.0);
+        libraryAddArtistName.setPromptText("Artist Name");
+
+        libraryAddRuntime.setLayoutX(14.0);
+        libraryAddRuntime.setLayoutY(614.0);
+        libraryAddRuntime.setMaxHeight(USE_PREF_SIZE);
+        libraryAddRuntime.setMaxWidth(USE_PREF_SIZE);
+        libraryAddRuntime.setMinHeight(USE_PREF_SIZE);
+        libraryAddRuntime.setMinWidth(USE_PREF_SIZE);
+        libraryAddRuntime.setPrefHeight(26.0);
+        libraryAddRuntime.setPrefWidth(128.0);
+        libraryAddRuntime.setPromptText("Play Time");
+
+        libraryAddVideoFile.setLayoutX(155.0);
+        libraryAddVideoFile.setLayoutY(613.0);
+        libraryAddVideoFile.setMaxHeight(USE_PREF_SIZE);
+        libraryAddVideoFile.setMaxWidth(USE_PREF_SIZE);
+        libraryAddVideoFile.setMinHeight(USE_PREF_SIZE);
+        libraryAddVideoFile.setMinWidth(USE_PREF_SIZE);
+        libraryAddVideoFile.setPrefHeight(26.0);
+        libraryAddVideoFile.setPrefWidth(128.0);
+        libraryAddVideoFile.setPromptText("Video File Name");
+
+        libraryAdd.setLayoutX(90.0);
+        libraryAdd.setLayoutY(518.0);
+        libraryAdd.setMnemonicParsing(false);
+        libraryAdd.setPrefHeight(36.0);
+        libraryAdd.setPrefWidth(33.0);
+        libraryAdd.setStyle("-fx-background-radius: 100;");
+
+        libraryAddImage1.setFitHeight(23.0);
+        libraryAddImage1.setFitWidth(16.0);
+        libraryAddImage1.setPickOnBounds(true);
+        libraryAddImage1.setPreserveRatio(true);
+        libraryAddImage1.setImage(new Image(getClass().getResource("Icons/plus.png").toExternalForm()));
+        libraryAdd.setGraphic(libraryAddImage1);
+
+        libraryIncludeLibraryLabel.setLayoutX(130.0);
+        libraryIncludeLibraryLabel.setLayoutY(657.0);
+        libraryIncludeLibraryLabel.setText("Add to Library");
+        libraryIncludeLibraryLabel.setFont(new Font(16.0));
+
+        libraryAddQueueText.setLayoutX(133.0);
+        libraryAddQueueText.setLayoutY(525.0);
+        libraryAddQueueText.setPrefHeight(25.0);
+        libraryAddQueueText.setPrefWidth(111.0);
+        libraryAddQueueText.setText("Add to Queue");
+        libraryAddQueueText.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        libraryAddQueueText.setFont(new Font(16.0));
+
+        libraryLineSeperator.setEndX(233.0);
+        libraryLineSeperator.setLayoutX(67.0);
+        libraryLineSeperator.setLayoutY(563.0);
+        libraryLineSeperator.setStartX(-100.0);
 
         mediaWrapper.setId("Content");
         mediaWrapper.setMaxHeight(USE_PREF_SIZE);
@@ -176,7 +264,6 @@ public abstract class UIView extends VBox {
 
         mediaView.setFitHeight(700.0);
         mediaView.setFitWidth(1200.0);
-        mediaView.setPreserveRatio(true);
 
         mediaStop.setLayoutX(522.0);
         mediaStop.setLayoutY(643.0);
@@ -199,17 +286,17 @@ public abstract class UIView extends VBox {
         mediaPlay.setPrefWidth(33.0);
         mediaPlay.setStyle("-fx-background-radius: 100;");
 
+        mvw = mediaView.fitWidthProperty();
+        mvh = mediaView.fitHeightProperty();
+        mvw.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
+        mvh.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
+
         mediaPlayImage.setFitHeight(23.0);
         mediaPlayImage.setFitWidth(16.0);
         mediaPlayImage.setPickOnBounds(true);
         mediaPlayImage.setPreserveRatio(true);
         mediaPlayImage.setImage(new Image(getClass().getResource("Icons/play.png").toExternalForm()));
         mediaPlay.setGraphic(mediaPlayImage);
-
-        mvw = mediaView.fitWidthProperty();
-        mvh = mediaView.fitHeightProperty();
-        mvw.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
-        mvh.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
 
         mediaPause.setLayoutX(618.0);
         mediaPause.setLayoutY(643.0);
@@ -253,8 +340,8 @@ public abstract class UIView extends VBox {
         queueText.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         queueText.setWrapText(false);
 
-        queueRemove.setLayoutX(140.0);
-        queueRemove.setLayoutY(631.0);
+        queueRemove.setLayoutX(69.0);
+        queueRemove.setLayoutY(636.0);
         queueRemove.setMnemonicParsing(false);
         queueRemove.setPrefHeight(36.0);
         queueRemove.setPrefWidth(33.0);
@@ -285,12 +372,28 @@ public abstract class UIView extends VBox {
         queueList.setPrefHeight(522.0);
         queueList.setPrefWidth(273.0);
 
+        QueueRemoveLabel.setLayoutX(114.0);
+        QueueRemoveLabel.setLayoutY(642.0);
+        QueueRemoveLabel.setPrefHeight(25.0);
+        QueueRemoveLabel.setPrefWidth(149.0);
+        QueueRemoveLabel.setText("Remove from Queue");
+        QueueRemoveLabel.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        QueueRemoveLabel.setFont(new Font(16.0));
+
         libraryWrapper.getChildren().add(libraryText);
         libraryWrapper.getChildren().add(libraryList);
         libraryWrapper.getChildren().add(librarySearchField);
-        libraryWrapper.getChildren().add(libraryAdd);
+        libraryWrapper.getChildren().add(libraryIncludeButton);
         libraryWrapper.getChildren().add(librarySearchName);
         libraryWrapper.getChildren().add(librarySearchReset);
+        libraryWrapper.getChildren().add(libraryAddName);
+        libraryWrapper.getChildren().add(libraryAddArtistName);
+        libraryWrapper.getChildren().add(libraryAddRuntime);
+        libraryWrapper.getChildren().add(libraryAddVideoFile);
+        libraryWrapper.getChildren().add(libraryAdd);
+        libraryWrapper.getChildren().add(libraryIncludeLibraryLabel);
+        libraryWrapper.getChildren().add(libraryAddQueueText);
+        libraryWrapper.getChildren().add(libraryLineSeperator);
         mainWrapper.getItems().add(libraryWrapper);
         mediaWrapper.getChildren().add(mediaView);
         mediaWrapper.getChildren().add(mediaStop);
@@ -302,7 +405,9 @@ public abstract class UIView extends VBox {
         queueWrapper.getChildren().add(queueRemove);
         queueWrapper.getChildren().add(queueCurrentLabel);
         queueWrapper.getChildren().add(queueList);
+        queueWrapper.getChildren().add(QueueRemoveLabel);
         mainWrapper.getItems().add(queueWrapper);
         getChildren().add(mainWrapper);
+
     }
 }

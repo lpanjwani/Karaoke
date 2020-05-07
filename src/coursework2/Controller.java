@@ -11,6 +11,7 @@
 package coursework2;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,8 +31,9 @@ import javafx.util.Duration;
  * 
  * @author Lavesh Panjwani
  */
-public class UIController extends UIView {
+public class Controller extends View {
 
+    private String fileName;
     private MediaPlayer player;
     private Song current;
     private int currentPlayRemaining;
@@ -42,7 +44,7 @@ public class UIController extends UIView {
     /*
      * Constructor
      */
-    public UIController(String libraryFileName) {
+    public Controller(String libraryFileName) {
         super();
 
         /*
@@ -64,9 +66,14 @@ public class UIController extends UIView {
         librarySearchName.setOnAction(this::SearchByName);
         // Library Search Reset Action
         librarySearchReset.setOnAction(this::ResetSearchResults);
+        // Library Include Button
+        libraryIncludeButton.setOnAction(this::includeSong);
+
+        // Store File Name
+        this.fileName = libraryFileName;
 
         // Initiate Song Library
-        initLibrary(libraryFileName);
+        initLibrary();
     }
 
     /*
@@ -78,10 +85,10 @@ public class UIController extends UIView {
     /*
      * Initialize Library from File
      */
-    private void initLibrary(String filename) {
+    private void initLibrary() {
         try {
             // Load Song Data into Library
-            library = Utils.ReadTabFile(filename);
+            library = Utils.ReadTabFile(fileName);
 
             // Update JavaFX Library ListView
             updateLibraryView();
@@ -197,6 +204,9 @@ public class UIController extends UIView {
             SkipSong(); // Skip Song since Current is not Valid/Available/Set
     }
 
+    /*
+     * Set Playing Information based on Queue
+     */
     private void setCurrentText() {
         // Check if Current Song is Valid/Available/Set
         if (isCurrentSet()) {
@@ -212,6 +222,88 @@ public class UIController extends UIView {
      * JavaFX Song Library & PlayList View Methods
      * 
      */
+
+    /*
+     * Include/Add User Entered Song in Library & Songs File
+     */
+    private void includeSong(Event e) {
+        try {
+            // Get Song Name Entered by User
+            String name = libraryAddName.getText();
+            // Get Artist Name Entered by User
+            String artist = libraryAddArtistName.getText();
+            // Get Play Time Entered by User
+            int playTime = Integer.parseInt(libraryAddRuntime.getText());
+            // Get File Name Entered by User
+            String videoFileName = libraryAddVideoFile.getText();
+
+            // Check for Empty Fields
+            if (name.length() < 1 || artist.length() < 1 || fileName.length() < 1) {
+                // Throw No Such Field Exception if fields are empty
+                throw new NoSuchFieldException();
+            }
+
+            // Add Song to Library
+            library.add(new Song(name, artist, playTime, videoFileName));
+
+            // Update JavaFX Library ListView to include New Song
+            updateLibraryView();
+
+            // Create Tab Separated Text to append in Song File
+            String appendText = name + '\t' + artist + '\t' + playTime + '\t' + videoFileName;
+
+            // Append Text to File
+            Utils.AppendFile(fileName, appendText);
+
+            // Reset Song Name Field to Blank
+            libraryAddName.setText("");
+            // Reset Artist Name Field to Blank
+            libraryAddArtistName.setText("");
+            // Reset Play Time Field to Blank
+            libraryAddRuntime.setText("");
+            // Reset Video File Name Field to Blank
+            libraryAddVideoFile.setText("");
+
+            // Create New Alert with Confirmation Body
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+
+            // Set Alert Dialogue Content Text
+            alert.setContentText("Song Added!");
+
+            // Show & acknowledge User Response
+            alert.showAndWait();
+        } catch (NoSuchFieldException err) {
+            // Create New Alert with Error Body
+            Alert alert = new Alert(AlertType.ERROR);
+
+            // Set Alert Dialogue Content Text
+            alert.setContentText("Dear User, Missing Entry Fields! Please enter all fields to add a song.");
+
+            // Show & acknowledge User Response
+            alert.showAndWait();
+        } catch (NumberFormatException err) {
+            // Create New Alert with Error Body
+            Alert alert = new Alert(AlertType.ERROR);
+
+            // Set Alert Dialogue Content Text
+            alert.setContentText("Dear User, Please enter Song Play Time in Seconds!");
+
+            // Show & acknowledge User Response
+            alert.showAndWait();
+        } catch (IOException err) {
+            // Print Error Stack Trace
+            err.printStackTrace();
+
+            // Create New Alert with Error Body
+            Alert alert = new Alert(AlertType.ERROR);
+
+            // Set Alert Dialogue Content Text
+            alert.setContentText("Dear User, Please close the song file to add a song!");
+
+            // Show & acknowledge User Response
+            alert.showAndWait();
+        }
+    }
 
     /*
      * Update JavaFX Song Library List
@@ -383,18 +475,19 @@ public class UIController extends UIView {
     }
 
     /*
-     * Search Song by Name (Supports Searching by Characters & Keywords)
+     * Search Song by Name (Supports Searching by Characters & Keywords) Searching
+     * is Case Insensitive (User Focused)
      */
     private void SearchByName(Event e) {
         // Check Text Entered in Search Field
-        String substring = librarySearchField.getText();
+        String substring = librarySearchField.getText().toLowerCase();
 
         // Iterate over Song Library List
         for (Song song : library) {
             // Retrieve Song Name from Song Class
             String songName = song.getName().toLowerCase();
             // Check if Substring is in Song Name
-            if (songName.contains(substring.toLowerCase())) {
+            if (songName.contains(substring)) {
                 // Song matches Search Criteria & Add to Results
                 this.search.add(song);
             }

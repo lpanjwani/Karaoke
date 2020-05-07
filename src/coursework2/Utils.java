@@ -10,8 +10,12 @@
 
 package coursework2;
 
+import java.io.BufferedWriter;
 import java.io.File; // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +28,6 @@ import java.util.Scanner; // Import the Scanner class to read text files
  */
 
 interface Utils {
-
     /**
      * Reads, Parses & Returns Library File
      * 
@@ -66,6 +69,34 @@ interface Utils {
         }
         // Default Returns null
         return null;
+    }
+
+    /**
+     * Appends New Song to Library File
+     * 
+     * @throws IOException
+     */
+    public static void AppendFile(String fileName, String text) throws IOException {
+        // Get FileWriter with Relative Path
+        FileWriter file = new FileWriter(RelativeFilePath(fileName).getFile(), true);
+
+        // Create BufferedWriter Class
+        BufferedWriter bw = new BufferedWriter(file);
+
+        // Wrap PrintWriter from BufferWriter
+        PrintWriter out = new PrintWriter(bw);
+
+        // Append Text to File
+        out.println(text);
+
+        // Close PrintWriter Connection
+        out.close();
+
+        // Close BufferedWriter Connection
+        bw.close();
+
+        // Close BufferedWriter Connection
+        file.close();
     }
 
     /**
