@@ -9,7 +9,6 @@
 package coursework2;
 
 import java.util.List;
-import java.util.Map;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -34,7 +33,7 @@ public class Coursework2 extends Application {
             String fileName = rawArguments.get(0);
 
             // Create UI Controller that Contains App Logic
-            UIController ui = new UIController(fileName);
+            Controller ui = new Controller(fileName);
 
             // Create UIController to JavaFX Scene
             Scene scene = new Scene(ui);
