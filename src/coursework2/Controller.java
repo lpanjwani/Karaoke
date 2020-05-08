@@ -384,6 +384,9 @@ public class Controller extends View {
         } else {
             // No Song Found so Reset Current Song Information
             this.current = null;
+
+            // Stop Player
+            this.player.stop();
         }
 
         // Set Current Track Information
