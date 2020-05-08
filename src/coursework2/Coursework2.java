@@ -8,11 +8,10 @@
  */
 package coursework2;
 
-import java.util.List;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.util.List;
 
 /**
  *

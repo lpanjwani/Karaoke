@@ -37,9 +37,9 @@ public class Controller extends View {
     private MediaPlayer player;
     private Song current;
     private int currentPlayRemaining;
-    private List<Song> library = new ArrayList<Song>();
-    private List<Song> search = new ArrayList<Song>();
-    private Queue<Song> playlist = new LinkedList<Song>();
+    private List<Song> library = new ArrayList<>();
+    private List<Song> search = new ArrayList<>();
+    private Queue<Song> playlist = new LinkedList<>();
 
     /*
      * Constructor
@@ -210,7 +210,7 @@ public class Controller extends View {
     private void setCurrentText() {
         // Check if Current Song is Valid/Available/Set
         if (isCurrentSet()) {
-            queueCurrentLabel.setText("Currently Playing: " + current.getName() + "ft." + current.getArtist());
+            queueCurrentLabel.setText("Currently Playing: " + current.toString());
         } else {
             // No Song in Queue Text Label
             queueCurrentLabel.setText("Stopped");
@@ -309,22 +309,11 @@ public class Controller extends View {
      * Update JavaFX Song Library List
      */
     private void updateLibraryView() {
-        // Create New JavaFX Observable List for Displaying
-        ObservableList<String> list = FXCollections.observableArrayList();
-
         // Select List to Display with Search Displaying Conditionally when Active
         List<Song> results = search.size() > 0 ? search : library;
 
-        // Iterate over Song Library/Results List
-        for (Song song : results) {
-            // Fetch Song Name from Song Class
-            String songName = song.getName();
-            // Fetch Song's Artist Name from Library
-            String songArtist = song.getArtist();
-
-            // Add to List after Formatted String
-            list.add(songName + " ft. " + songArtist);
-        }
+        // Create New JavaFX Observable List for Displaying Library
+        ObservableList<Song> list = FXCollections.observableList(results);
 
         // Set JavaFX Display Items from List
         libraryList.setItems(list);
@@ -334,17 +323,8 @@ public class Controller extends View {
      * Update JavaFX Song Queue List
      */
     private void updateQueueView() {
-        ObservableList<String> list = FXCollections.observableArrayList();
-
-        // Iterate over Song Queue / PlayList
-        for (Song song : playlist) {
-            // Fetch Song Name from Song Class
-            String songName = song.getName();
-            // Fetch Song's Artist Name from Library
-            String songArtist = song.getArtist();
-            // Add to List after Formatted String
-            list.add(songName + " ft. " + songArtist);
-        }
+        // Create New JavaFX Observable List for Displaying Playlist
+        ObservableList<Song> list = FXCollections.observableList((List<Song>) playlist);
 
         // Set JavaFX Display Items from List
         queueList.setItems(list);
@@ -437,10 +417,10 @@ public class Controller extends View {
      */
     private void RemoveFromQueue(Event e) {
         // Fetch Selected Index from Queue Tab
-        int index = queueList.getSelectionModel().getSelectedIndex();
+        Object object = queueList.getSelectionModel().getSelectedItem();
 
         // Remove Entry to PlayList / Queue
-        this.playlist.remove(index);
+        this.playlist.remove(object);
 
         // Update Queue JavaFX View
         updateQueueView();
@@ -479,6 +459,9 @@ public class Controller extends View {
      * is Case Insensitive (User Focused)
      */
     private void SearchByName(Event e) {
+        // Reset Current Results
+        ResetSearchResults();
+
         // Check Text Entered in Search Field
         String substring = librarySearchField.getText().toLowerCase();
 

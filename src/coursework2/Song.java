@@ -65,4 +65,13 @@ public class Song {
     public String getLocation() {
         return videoPath;
     }
+
+    /*
+     * Return Display Name
+     * 
+     * @returns String
+     */
+    public String toString() {
+        return name + " ft. " + artist;
+    }
 }

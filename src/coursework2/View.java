@@ -29,7 +29,7 @@ public abstract class View extends VBox {
     protected final SplitPane mainWrapper;
     protected final AnchorPane libraryWrapper;
     protected final Label libraryText;
-    protected final ListView libraryList;
+    protected final ListView<Song> libraryList;
     protected final TextField librarySearchField;
     protected final Button libraryIncludeButton;
     protected final ImageView libraryAddImage;
@@ -59,7 +59,7 @@ public abstract class View extends VBox {
     protected final Button queueRemove;
     protected final ImageView queueRemoveImage;
     protected final Label queueCurrentLabel;
-    protected final ListView queueList;
+    protected final ListView<Song> queueList;
     protected final Label QueueRemoveLabel;
     protected DoubleProperty mvw;
     protected DoubleProperty mvh;

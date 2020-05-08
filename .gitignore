@@ -12,3 +12,4 @@ nbdist/
 test/
 *.mp4
 *.txt
+.VSCodeCounter
